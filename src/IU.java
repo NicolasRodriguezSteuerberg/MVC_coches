@@ -9,12 +9,26 @@ public class IU {
     private JTextField tMatricula;
     private JLabel eModelo;
     private JLabel eMatricula;
+    private JButton button1;
+    private JButton button2;
 
     public IU() {
         bCrear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Controller.crearCoche(tModelo.getText(),tMatricula.getText());
+            }
+        });
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Controller.bajarVelocidad(tMatricula.getText());
+            }
+        });
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Controller.aumentarVelocidad(tMatricula.getText());
             }
         });
     }

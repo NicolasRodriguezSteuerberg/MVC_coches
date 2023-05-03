@@ -10,4 +10,14 @@ public class Controller {
             miVista.muestraVelocidad(aux.matricula, aux.velocidad);
         }
     }
+
+    public static void bajarVelocidad(String matricula){
+        int aux = miModelo.bajarVelocidad(matricula);
+        miVista.muestraVelocidad(matricula, aux);
+    }
+
+    public static void aumentarVelocidad(String matricula){
+        int aux = miModelo.subirVelocidad(matricula);
+        miVista.muestraVelocidad(matricula,aux);
+    }
 }
