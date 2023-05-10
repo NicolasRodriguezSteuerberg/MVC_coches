@@ -2,8 +2,15 @@ public class Controller {
     static Model miModelo = new Model();
     static View miVista = new View();
     public static void main(String[] args) {
+        OVelocidad oVelocidad = new OVelocidad();
+        miModelo.addObserver(oVelocidad);
         IU.crearVentana();
     }
+
+    /**
+     * @param modelo
+     * @param matricula
+     */
     public static void crearCoche(String modelo, String matricula){
         Coche aux = miModelo.crearCoche(modelo,matricula);
         if(aux!=null){
@@ -11,13 +18,17 @@ public class Controller {
         }
     }
 
+    /**
+     * @param matricula
+     */
     public static void bajarVelocidad(String matricula){
-        int aux = miModelo.bajarVelocidad(matricula);
-        miVista.muestraVelocidad(matricula, aux);
+        miModelo.bajarVelocidad(matricula);
     }
 
+    /**
+     * @param matricula
+     */
     public static void aumentarVelocidad(String matricula){
-        int aux = miModelo.subirVelocidad(matricula);
-        miVista.muestraVelocidad(matricula,aux);
+        miModelo.subirVelocidad(matricula);
     }
 }
