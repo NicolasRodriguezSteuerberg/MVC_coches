@@ -10,7 +10,9 @@ public class Model {
      * @return el coche creado
      */
     public Coche crearCoche(String modelo, String matricula){
+        //Crea un coche y lo guarda en un auxiliar
         Coche aux = new Coche(modelo, matricula);
+        //Añade el coche en la colección llamada parking
         parking.add(aux);
         return aux;
     }
@@ -45,24 +47,22 @@ public class Model {
 
     /**
      * @param matricula
-     * @param v -> velocidad a subir
      * @return velocidad modificada
      */
-    public Integer subirVelocidad(String matricula, Integer v) {
+    public Integer subirVelocidad(String matricula) {
         // busca el coche y sube la velocidad
-        getCoche(matricula).velocidad = getCoche(matricula).velocidad + v;
+        getCoche(matricula).velocidad = getCoche(matricula).velocidad + 10;
         // retorna la nueva velocidad
         return getCoche(matricula).velocidad;
     }
 
     /**
      * @param matricula
-     * @param v -> velocidad a bajar
      * @return velocidad modificada
      */
-    public Integer bajarVelocidad(String matricula, Integer v) {
+    public Integer bajarVelocidad(String matricula) {
         // busca el coche y sube la velocidad
-        getCoche(matricula).velocidad = getCoche(matricula).velocidad - v;
+        getCoche(matricula).velocidad = getCoche(matricula).velocidad - 10;
         // retorna la nueva velocidad
         return getCoche(matricula).velocidad;
     }

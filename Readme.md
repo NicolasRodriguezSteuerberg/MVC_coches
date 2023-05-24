@@ -1,9 +1,13 @@
 # Arquitectura MVC
 
-Aplicación que trabaja con objetos coches, modifica la velocidad y la muestra
+Aplicación que trabaja con objetos coches, modifica la velocidad y la muestra, tambien con la posibilidad de mostrar el coche al completo
 
 ---
-## Diagrama de clases:
+
+En esta rama está añadido los eventos en la IU
+
+---
+### Diagrama de clases:
 
 ```mermaid
 classDiagram
@@ -14,106 +18,99 @@ classDiagram
     }
       class Controller{
           +main()
+          +crearCoche(String, String)
+          +subirVelocidad(String)
+          +bajarVelocidad(String)
+          +buscarCoche(String)
       }
-      class View {+muestraVelocidad(String, Integer)}
+      class View {
+        +muestraVelocidad(String, Integer) 
+        +muestraCoche(Coche, String)
+      }
       class Model {
           ArrayList~Coche~: parking
           +crearCoche(String, String, String)
           +getCoche(String)
           +cambiarVelocidad(String, Integer)
-          +subirVelocidad(String, Integer)
-          +bajarVelocidad(String, Integer)
           +getVelocidad(String)
+      }
+      
+      class IU { mostrarVentana()}
+      
+      class Dialog { 
+        +mostrarVelocidad(String, Integer) 
+        +mostrarCoche(Coche, String)  
       }
     Controller "1" *-- "1" Model : association
     Controller "1" *-- "1" View : association
     Model "1" *-- "1..n" Coche : association
-      
+    View "1" *-- "1" IU : association
+    View "1" *-- "1" Dialog : association
 ```
 
 ---
 
-## Diagrama de Secuencia
+## Evento en el View
 
-Ejemplo básico del procedimiento, sin utilizar los nombres de los métodos
+Cuando ocurre un evento en la vista, el `controller` se tiene que enterar.
+Tenemos que tener en cuenta que en el MVC estricto, la vista no se comunica con el modelo.
 
+En el listener del botón llamamos al `controller` y este llama primero al `model` y al recibir los datos del model llama a la vista `view`.
 
-```mermaid
-sequenceDiagram
-    participant Model
-    participant Controller
-    participant View
-    Controller->>Model: Puedes crear un coche?
-    activate Model
-    Model-->>Controller: Creado!
-    deactivate Model
-    Controller->>+View: Muestra la velocidad, porfa
-    activate View
-    View->>-View: Mostrando velocidad
-    View-->>Controller: Listo!
-    deactivate View
-    Controller->>Model: Puedes aumenterle la velocidad?
-    activate Model
-    Model-->>Controller: Subida!
-    deactivate Model
-    Controller->>+View: Muestra la velocidad, porfa
-    activate View
-    View->>-View: Mostrando velocidad
-    View-->>Controller: Listo!
-    deactivate View
-    Controller->>Model: Puedes bajarle la velocidad?
-    activate Model
-    Model-->>Controller: Bajada!
-    deactivate Model
-    Controller->>+View: Muestra la velocidad, porfa
-    activate View
-    View->>-View: Mostrando velocidad
-    View-->>Controller: Listo!
-    deactivate View
-```
-
-El mismo diagrama con los nombres de los métodos
 
 ```mermaid
 sequenceDiagram
-    participant Model
-    participant Controller
+    actor usuario
     participant View
-    Controller->>Model: crearCoche("LaFerrari", "SBC 1234")
+    participant Controller
+    participant Model
+    
+    usuario->>View: click! Crear coche
+    View->>Controller: el usuario quiere crear un coche
+    activate Controller
+    Controller->>Model: crea un coche, porfa
     activate Model
     Model-->>Controller: Coche
     deactivate Model
-    Controller->>+View: muestraVelocidad("SBC 1234", velocidad)
-    activate View
-    View->>-View: System.out.println()
-    View-->>Controller: boolean
-    deactivate View
-    Controller->>Model: cambiarVelocidad("SBC 1234", velocidadSubir)
-    activate Model
-    Model-->>Controller: Velocidad
-    deactivate Model
-    Controller->>+View: muestraVelocidad("SBC 1234", velocidad)
-    activate View
-    View->>-View: System.out.println()
-    View-->>Controller: boolean
-    deactivate View
-    Controller->>Model: subirVelocidad("SBC 1234", velocidadSubir)
-    activate Model
-    Model-->>Controller: Velocidad
-    deactivate Model
-    Controller->>+View: muestraVelocidad("SBC 1234", velocidad)
-    activate View
-    View->>-View: System.out.println()
-    View-->>Controller: boolean
-    deactivate View
-    Controller->>Model: bajarVelocidad("SBC 1234", velocidadSubir)
-    activate Model
-    Model-->>Controller: Velocidad
-    deactivate Model
-    Controller->>+View: muestraVelocidad("SBC 1234", velocidad)
-    activate View
-    View->>-View: System.out.println()
-    View-->>Controller: boolean
-    deactivate View
-    
+    Controller->>View: ok, coche creado!
+    deactivate Controller
+    View-->>usuario: tu coche se creó!
 ```
+Pasa lo mismo con los métodos subir velocidad, bajar velocidad y ver coche pero cambiando el texto por el respectivo de esos métodos.
+
+Ahora la parte de la Arquitectura de la vista, son tres clases:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor usuario
+    box gray Vista con JFrame
+        participant IU
+        participant Dialog
+        participant View
+        end
+        
+    participant Controller
+    participant Model
+
+    usuario->>IU: click! Crear coche
+    IU->>Controller: crearCoche()
+    activate Controller
+    Controller->>Model: crearCoche
+    activate Model
+    Model-->>Controller: Coche
+    deactivate Model
+    Controller->>+View: mostrarVelocidad
+    deactivate Controller
+    View-->>-Dialog: mostrarVelocidad()
+```
+
+Aquí como en el otro esquema, con los otros métodos pasa exactamente lo mismo pero con las llamadas del respectivo método.
+
+Cerrando el issue #1
+
+En está rama hemos implementado la funcionalidad de buscar coches. Para esto hemos creado un método estático llamado buscarCoche, este recibe la matricula del coche del que queremos mostrar la información.
+
+Este método recoge el coche en un auxiliar del método getCoche del model. Seguido de esto llama a la vista para mostrar el Coche.
+
+En la vista he creado un método llamado muestraCoche que recibe el auxiliar de coche del controller y la matricula. Aquí se mira si el auxiliar es nulo, al ser así saca por el dialog un mensaje de que no existe el coche con tal matrícula. En caso de que si exista el coche muestra toda la información del coche a traves del dialog
