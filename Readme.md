@@ -108,3 +108,9 @@ sequenceDiagram
 Aquí como en el otro esquema, con los otros métodos pasa exactamente lo mismo pero con las llamadas del respectivo método.
 
 Cerrando el issue #1
+
+En está rama hemos implementado la funcionalidad de buscar coches. Para esto hemos creado un método estático llamado buscarCoche, este recibe la matricula del coche del que queremos mostrar la información.
+
+Este método recoge el coche en un auxiliar del método getCoche del model. Seguido de esto llama a la vista para mostrar el Coche.
+
+En la vista he creado un método llamado muestraCoche que recibe el auxiliar de coche del controller y la matricula. Aquí se mira si el auxiliar es nulo, al ser así saca por el dialog un mensaje de que no existe el coche con tal matrícula. En caso de que si exista el coche muestra toda la información del coche a traves del dialog
