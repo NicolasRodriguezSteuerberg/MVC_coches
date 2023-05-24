@@ -107,4 +107,3 @@ sequenceDiagram
 
 Aquí como en el otro esquema, con los otros métodos pasa exactamente lo mismo pero con las llamadas del respectivo método.
 
-Cerrando el issue #1
