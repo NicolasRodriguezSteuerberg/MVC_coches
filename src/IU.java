@@ -11,6 +11,7 @@ public class IU {
     private JLabel eMatricula;
     private JButton button1;
     private JButton button2;
+    private JButton bVerCoche;
 
     public IU() {
         bCrear.addActionListener(new ActionListener() {
@@ -29,6 +30,12 @@ public class IU {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Controller.aumentarVelocidad(tMatricula.getText());
+            }
+        });
+        bVerCoche.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Controller.buscarCoche(tMatricula.getText());
             }
         });
     }

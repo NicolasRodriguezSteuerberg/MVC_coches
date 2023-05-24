@@ -14,7 +14,7 @@
         </constraints>
         <properties>
           <horizontalAlignment value="0"/>
-          <text value="&quot;El coche: &quot; + matricula + &quot; tiene una velocidad de es: &quot; + v + &quot;km/h&quot;"/>
+          <text value="&quot;El coche: &quot; + matricula + &quot; tiene una velocidad de es: &quot; + v + &quot;km/h          &quot;"/>
         </properties>
       </component>
     </children>

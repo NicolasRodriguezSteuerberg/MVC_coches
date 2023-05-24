@@ -10,7 +10,9 @@ public class Model {
      * @return el coche creado
      */
     public Coche crearCoche(String modelo, String matricula){
+        //Crea un coche y lo guarda en un auxiliar
         Coche aux = new Coche(modelo, matricula);
+        //Añade el coche en la colección llamada parking
         parking.add(aux);
         return aux;
     }
