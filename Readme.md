@@ -114,3 +114,87 @@ En está rama hemos implementado la funcionalidad de buscar coches. Para esto he
 Este método recoge el coche en un auxiliar del método getCoche del model. Seguido de esto llama a la vista para mostrar el Coche.
 
 En la vista he creado un método llamado muestraCoche que recibe el auxiliar de coche del controller y la matricula. Aquí se mira si el auxiliar es nulo, al ser así saca por el dialog un mensaje de que no existe el coche con tal matrícula. En caso de que si exista el coche muestra toda la información del coche a traves del dialog
+
+
+---
+## Pasos para crear el observer
+
+1. Model
+    * Extiende de `Observable`
+    * En el método en donde ocurra el cambio (en este caso en subir y bajar velocidad):
+        * setChenged()
+        * notifyObserver(valor) -> en este caso: notifyObserver(getCoche(matricula))
+2. Crear una clase que sea el observador, que implementa la interface `Observer` (ObsExceso en este ejemplo)
+    * definir el método `update()`
+3. Controller
+    * Instanciar el observer, definido en el punto anterior
+    * Añadir este observer al observable con `addObserver()`
+
+---
+## Evento en la Vista con el Observer
+Este sería el diagrama de secuencias explicado de forma general
+```mermaid
+sequenceDiagram
+    actor usuario
+    participant View
+    participant Controller
+    participant Model
+    participant ObsExceso
+    
+    usuario->>View: click! Crear coche
+    View->>Controller: el usuario quiere crear un coche
+    activate Controller
+    Controller->>Model: crea un coche, porfa
+    activate Model
+    Model-->>Controller: Coche
+    deactivate Model
+    Controller->>View: ok, coche creado!
+    deactivate Controller
+    View-->>usuario: tu coche se creó!
+    
+    usuario->>View: click! Subir velocidad
+    View->>Controller: el usuario quiere subir la velocidad
+    activate Controller
+    Controller->>Model: sube la velocidad, porfa
+    activate Model
+    Model-->>ObsExceso: Sube la Velocidad
+    activate ObsExceso
+    ObsExceso-->>View: cambio en la velocidad
+    View-->usuario: tu coche ha cambiado la velocidad (si la velocidad supera los 120km/h le sale un aviso)
+```
+
+---
+## Evento con Observer pero con los nombres de los métodos
+De esta manera sería el diagrama de secuencias explicado de forma mas específica
+```mermaid
+sequenceDiagram
+    autonumber
+    actor usuario        
+    participant Controller
+    participant Model
+    participant ObsExceso
+
+    usuario->>IU: click! Crear coche
+    IU->>Controller: crearCoche()
+    activate Controller
+    Controller->>Model: crearCoche
+    activate Model
+    Model-->>Controller: Coche
+    deactivate Model
+    Controller->>+View: mostrarVelocidad
+    deactivate Controller
+    View-->>-Dialog: mostrarVelocidad()
+    
+    usuario->>IU: click! Subir velocidad
+    IU->>Controller: subirVelocidad()
+    activate Controller
+    Controller->>Model: subirVelocidad()
+    deactivate Controller
+    activate Model
+    Model-->>ObsExceso: Se ha cambiado la Velocidad
+    deactivate Model
+    activate ObsExceso
+    ObsExceso->>+View: mostrarVelocidad() o mostrarExceso()
+    deactivate ObsExceso
+    View-->>-Dialog: mostrarVelocidad()
+```
