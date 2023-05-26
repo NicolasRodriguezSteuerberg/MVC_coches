@@ -1,7 +1,11 @@
 public class Controller {
     static Model miModelo = new Model();
     static View miVista = new View();
+
     public static void main(String[] args) {
+        //creas un objeto del observer creado para, seguidamente poder añadirlo al model y que funcione
+        ObsExceso miObserver = new ObsExceso();
+        miModelo.addObserver(miObserver);
         IU.crearVentana();
     }
 
@@ -24,10 +28,8 @@ public class Controller {
      * @param matricula -> matricula del coche a disminuir su velocidad
      */
     public static void bajarVelocidad(String matricula){
-        //Recoge la velocidad del metodo bajar velocidad del model y lo guarda en una auxiliar
-        int aux = miModelo.bajarVelocidad(matricula);
-        //llama a la vista para que muestre su velocidad
-        miVista.muestraVelocidad(matricula, aux);
+        //Llama al método bajar velocidad del model
+        miModelo.bajarVelocidad(matricula);
     }
 
     /**
@@ -35,10 +37,8 @@ public class Controller {
      * @param matricula -> matricula del coche a aumentar su velocidad
      */
     public static void aumentarVelocidad(String matricula){
-        //Recoge la velocidad del metodo subir velocidad del model y lo guarda en una auxiliar
-        int aux = miModelo.subirVelocidad(matricula);
-        //llama a la vista para que muestre su velocidad
-        miVista.muestraVelocidad(matricula,aux);
+        //Llama al método subir velocidad del model
+        miModelo.subirVelocidad(matricula);
     }
 
     /**

@@ -22,4 +22,8 @@ public class View {
             Dialog.vDialogo("El " + aux.modelo + " con la matrícula: " + aux.matricula + " tiene una velocidad de: " + aux.velocidad +"km/h");
         }
     }
+
+    void muestraExceso(String matricula, Integer v){
+        Dialog.vDialogo("Alerta el coche: " + matricula + " tiene una velocidad excedida ha superado los 120km/h, tiene velocidad de: " + v + "km/h");
+    }
 }
